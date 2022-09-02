@@ -12,7 +12,7 @@ export const getConvert = ( amount, from, to)=>{
     return(
         fetch(`https://api.apilayer.com/exchangerates_data/convert?to=${to}&from=${from}&amount=${amount}`, requestOptions)
   .then(response => response.text())
-  .then(result => console.log(result))
+  .then(result => result)
   .catch(error => console.log('error', error)) 
     )
  
