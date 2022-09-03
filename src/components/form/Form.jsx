@@ -5,28 +5,49 @@ import './styles.scss';
 export const Form = () => {
   const [topSelect, setTopSelect] = useState('USD');
   const [bottomSelect, setBottomSelect] = useState('UAH');
-  const [topInput, setTopInput] = useState(1);
-  const [bottomInput, setBottomInput] = useState(1);
+  const [topInput, setTopInput] = useState('');
+  const [bottomInput, setBottomInput] = useState('');
+
+  function debounce(f, ms) {
+    let isCooldown = false;
+
+    return function () {
+      if (isCooldown) return;
+      f.apply(this, arguments);
+      isCooldown = true;
+      setTimeout(() => (isCooldown = false), ms);
+    };
+  }
 
   const topCountCurrency = async e => {
     setTopSelect(e.target.value);
-    const data = await getConvert(topInput, e.target.value, bottomSelect );
+    const data = await getConvert(topInput, e.target.value, bottomSelect);
     setBottomInput(JSON.parse(data).result);
   };
 
   const bottomCountCurrency = async e => {
     setBottomSelect(e.target.value);
-    const data = await getConvert(bottomInput, topSelect,  e.target.value);
+    const data = await getConvert(bottomInput, topSelect, e.target.value);
     setTopInput(JSON.parse(data).result);
   };
 
-  const TopCountInput = async e => {
+  const topCountInput = async e => {
+    if (e.target.value === '') {
+      setBottomInput('');
+      setTopInput('');
+      return;
+    }
     setTopInput(e.target.value);
     const data = await getConvert(e.target.value, topSelect, bottomSelect);
     setBottomInput(JSON.parse(data).result);
   };
 
   const bottomCountInInput = async e => {
+    if (e.target.value === '') {
+      setTopInput('');
+      setBottomInput('');
+      return;
+    }
     setBottomInput(e.target.value);
     const data = await getConvert(e.target.value, bottomSelect, topSelect);
     setTopInput(JSON.parse(data).result);
@@ -41,21 +62,21 @@ export const Form = () => {
             <div className="amount">
               <div>
                 <p>Enter Amount</p>
-                <input type="text" value={topInput} onChange={TopCountInput} />
+                <input type="text" value={topInput} onChange={debounce(topCountInput, 1000)} />
               </div>
               <div>
                 <p>Enter Amount</p>
                 <input
                   type="text"
                   value={bottomInput}
-                  onChange={bottomCountInInput}
+                  onChange={debounce(bottomCountInInput, 1000)}
                 />
               </div>
             </div>
             <div>
               <div className="from">
                 <p>From</p>
-                <select value={topSelect} onChange={topCountCurrency}>
+                <select value={topSelect} onChange={debounce(topCountCurrency, 1000)}>
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
                   <option value="UAH">UAH</option>
@@ -63,7 +84,7 @@ export const Form = () => {
               </div>
               <div className="to">
                 <p>To</p>
-                <select value={bottomSelect} onChange={bottomCountCurrency}>
+                <select value={bottomSelect} onChange={debounce(bottomCountCurrency, 1000)}>
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
                   <option value="UAH">UAH</option>

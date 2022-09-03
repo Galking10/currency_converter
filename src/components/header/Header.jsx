@@ -6,14 +6,14 @@ export const Header = () => {
   const [dollar, setDollar] = useState(0);
   const [euro, setEuro] = useState(0);
 
-  useEffect(() => {
-    getConvert('1', 'USD', 'UAH').then(data =>
-      setDollar(JSON.parse(data).result),
-    );
-    getConvert('1', 'EUR', 'UAH').then(data =>
-      setEuro(JSON.parse(data).result),
-    );
-  }, []);
+//   useEffect(() => {
+//     getConvert('1', 'USD', 'UAH').then(data =>
+//       setDollar(JSON.parse(data).result),
+//     );
+//     getConvert('1', 'EUR', 'UAH').then(data =>
+//       setEuro(JSON.parse(data).result),
+//     );
+//   }, []);
   return (
     <header >
         <div className='header-container'>
