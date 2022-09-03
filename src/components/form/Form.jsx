@@ -1,3 +1,4 @@
+import { debounce } from 'lodash';
 import { useState } from 'react';
 import { getConvert } from '../../api/api';
 import './styles.scss';
@@ -7,17 +8,6 @@ export const Form = () => {
   const [bottomSelect, setBottomSelect] = useState('UAH');
   const [topInput, setTopInput] = useState('');
   const [bottomInput, setBottomInput] = useState('');
-
-  function debounce(f, ms) {
-    let isCooldown = false;
-
-    return function () {
-      if (isCooldown) return;
-      f.apply(this, arguments);
-      isCooldown = true;
-      setTimeout(() => (isCooldown = false), ms);
-    };
-  }
 
   const topCountCurrency = async e => {
     setTopSelect(e.target.value);
@@ -76,7 +66,7 @@ export const Form = () => {
             <div>
               <div className="from">
                 <p>From</p>
-                <select value={topSelect} onChange={debounce(topCountCurrency, 1000)}>
+                <select value={topSelect} onChange={topCountCurrency}>
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
                   <option value="UAH">UAH</option>
@@ -84,7 +74,7 @@ export const Form = () => {
               </div>
               <div className="to">
                 <p>To</p>
-                <select value={bottomSelect} onChange={debounce(bottomCountCurrency, 1000)}>
+                <select value={bottomSelect} onChange={bottomCountCurrency}>
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
                   <option value="UAH">UAH</option>
