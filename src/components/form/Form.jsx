@@ -1,4 +1,3 @@
-import { debounce } from 'lodash';
 import { useState } from 'react';
 import { getConvert } from '../../api/api';
 import './styles.scss';
@@ -29,7 +28,7 @@ export const Form = () => {
     }
     setTopInput(e.target.value);
     const data = await getConvert(e.target.value, topSelect, bottomSelect);
-    setBottomInput(JSON.parse(data).result);
+    setBottomInput(JSON.parse(data).result.toFixed(2));
   };
 
   const bottomCountInInput = async e => {
@@ -40,7 +39,8 @@ export const Form = () => {
     }
     setBottomInput(e.target.value);
     const data = await getConvert(e.target.value, bottomSelect, topSelect);
-    setTopInput(JSON.parse(data).result);
+    setTopInput(JSON.parse(data).result.toFixed(2));
+
   };
 
   return (
@@ -52,14 +52,14 @@ export const Form = () => {
             <div className="amount">
               <div>
                 <p>Enter Amount</p>
-                <input type="text" value={topInput} onChange={debounce(topCountInput, 1000)} />
+                <input type="text" value={topInput} onChange={topCountInput} />
               </div>
               <div>
                 <p>Enter Amount</p>
                 <input
                   type="text"
                   value={bottomInput}
-                  onChange={debounce(bottomCountInInput, 1000)}
+                  onChange={bottomCountInInput}
                 />
               </div>
             </div>
